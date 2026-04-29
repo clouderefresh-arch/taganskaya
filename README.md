@@ -35,12 +35,15 @@ AppleScript UI scripting.
 ```
 scripts/
   batch_convert_360.sh       # основной CLI: пакетная обработка папок
+  convert_one.sh             # враппер «один файл» для интеграции
   export_360.applescript     # добавляет один .360 в очередь экспорта
   start_queue.applescript    # запускает очередь
   watch_folder.sh            # обёртка для launchd
+  install_launchd.sh         # install/uninstall launchd-агента
 launchd/
   com.user.gopro360batch.plist  # шаблон launchd-агента (watch folder)
 docs/
+  INTEGRATION.md             # как встроить в свой скрипт автозагрузки
   TROUBLESHOOTING.md         # типовые проблемы и решения
 ```
 
@@ -171,6 +174,23 @@ mp4», настройте launchd-агента.
 
 ```bash
 ./scripts/install_launchd.sh uninstall
+```
+
+## Интеграция в чужой скрипт автозагрузки
+
+Если у вас уже есть скрипт, который скачивает файлы с камеры/SD-карты —
+готовые рецепты для встраивания конвертации (включая покадровый режим
+через `convert_one.sh`, JSON-итог и стабильные exit-коды) в
+[`docs/INTEGRATION.md`](docs/INTEGRATION.md).
+
+Коротко:
+
+```bash
+# один файл — из существующего скрипта автозагрузки
+~/taganskaya/scripts/convert_one.sh "$LOCAL_PATH"
+
+# проверить, что GoPro Player и разрешения в порядке
+~/taganskaya/scripts/batch_convert_360.sh --check
 ```
 
 ## Частые проблемы
