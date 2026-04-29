@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  launchd-агент: автоматически запускает batch_convert_360 каждый раз,
+  когда в "горячей" папке появляются новые .360 файлы.
+
+  Установка:
+    1. Отредактируйте пути ниже под себя:
+         <key>ProgramArguments</key>   - путь к watch_folder.sh и аргументы
+         <key>WatchPaths</key>          - "горячая" папка
+    2. Скопируйте файл:
+         cp launchd/com.user.gopro360batch.plist ~/Library/LaunchAgents/
+    3. Загрузите агента:
+         launchctl unload  ~/Library/LaunchAgents/com.user.gopro360batch.plist 2>/dev/null
+         launchctl load    ~/Library/LaunchAgents/com.user.gopro360batch.plist
+    4. Чтобы выгрузить:
+         launchctl unload  ~/Library/LaunchAgents/com.user.gopro360batch.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.user.gopro360batch</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-lc</string>
+        <!-- ОТРЕДАКТИРУЙТЕ ПУТИ ПОД СЕБЯ -->
+        <string>$HOME/taganskaya/scripts/watch_folder.sh "$HOME/Movies/GoPro_INBOX" "$HOME/Movies/GoPro" "$HOME/Movies/GoPro_PROCESSED"</string>
+    </array>
+
+    <key>WatchPaths</key>
+    <array>
+        <!-- ОТРЕДАКТИРУЙТЕ ПУТЬ ПОД СЕБЯ -->
+        <string>/Users/USERNAME/Movies/GoPro_INBOX</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>ThrottleInterval</key>
+    <integer>60</integer>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/gopro360batch.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/gopro360batch.err.log</string>
+</dict>
+</plist>
